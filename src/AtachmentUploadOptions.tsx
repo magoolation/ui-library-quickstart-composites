@@ -30,14 +30,14 @@ const fileSelectionHandler: AttachmentSelectionHandler = async (
       continue;
     }
 
-    const uniqueFileName = `${task}-${v4()}-${task.file?.name}`;
+    const uniqueFileName = `${v4()}-${task.file?.name}`;
     const formData = new FormData();
     formData.append("file", task.file, task.file?.name);
 
     try {
       const response = await axios.request({
         method: "post",
-        url: `/api/uploadFileToAzureBlobStore?filename=${uniqueFileName}`,
+        url: `https://localhost:7034/uploadfile?filename=${uniqueFileName}`,
         data: formData,
         headers: {
           "Content-Type": `multipart/form-data`,
@@ -55,7 +55,7 @@ const fileSelectionHandler: AttachmentSelectionHandler = async (
     } catch (error) {
       console.error(error);
       task.notifyUploadFailed(
-        "Unable to upload file. Please try again later."
+        `Unable to upload file. Please try again later.\n${error}`
       );
     }
   }
